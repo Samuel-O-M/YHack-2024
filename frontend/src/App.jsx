@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import './App.css';
 import JSZip from 'jszip';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [count, setCount] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
   const [latexCode, setLatexCode] = useState('');
+  const navigate = useNavigate(); // Use React Router's useNavigate hook
 
   const handleZipFileSelection = async (e) => {
     const zip = new JSZip();
@@ -13,11 +15,11 @@ function App() {
 
     if (file) {
       try {
-        //load the zip file
+        // Load the zip file
         const zipContent = await zip.loadAsync(file);
         const images = [];
         
-        //Trying to read the Zip File
+        // Trying to read the Zip File
         zipContent.forEach(async (relativePath, zipEntry) => {
           if (zipEntry.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
             const imageBlob = await zipEntry.async('blob');
@@ -25,7 +27,7 @@ function App() {
           }
         });
         
-      //If the Zip FIle is not readable then we just return an Error
+        // Set the selected images after reading the zip content
         setSelectedImages(images);
       } catch (error) {
         console.error('Error reading zip file:', error);
@@ -41,16 +43,17 @@ function App() {
         const text = await file.text();
         setLatexCode(text);
       } catch (error) { 
-        //catch if the txt file is not readable
         console.error('Error reading txt file:', error); 
       }
     }
   };
 
   const handleSubmit = () => {
-    // Here you can handle the submission of images and LaTeX code.
     console.log('Submitted Images:', selectedImages);
     console.log('Submitted LaTeX Code:', latexCode);
+    
+    // Redirect to the SlidePage component
+    navigate('/SlidePage'); 
   };
 
   return (
@@ -78,6 +81,7 @@ function App() {
           onChange={handleLatexFileSelection}
         />
       </div>
+
       <button className="submit-button" onClick={handleSubmit}>
         Submit
       </button>
