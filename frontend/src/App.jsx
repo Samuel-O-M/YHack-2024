@@ -1,85 +1,35 @@
-import { useState } from 'react';
-import './App.css';
-import JSZip from 'jszip';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [latexCode, setLatexCode] = useState('');
-
-  const handleZipFileSelection = async (e) => {
-    const zip = new JSZip();
-    const file = e.target.files[0];
-
-    if (file) {
-      try {
-        const zipContent = await zip.loadAsync(file);
-        const images = [];
-
-        zipContent.forEach(async (relativePath, zipEntry) => {
-          if (zipEntry.name.match(/\.(jpg|jpeg|png|gif)$/i)) {
-            const imageBlob = await zipEntry.async('blob');
-            images.push(new File([imageBlob], zipEntry.name));
-          }
-        });
-
-        setSelectedImages(images);
-      } catch (error) {
-        console.error('Error reading zip file:', error);
-      }
-    }
-  };
-
-  const handleLatexFileSelection = async (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      try {
-        const text = await file.text();
-        setLatexCode(text);
-      } catch (error) {
-        console.error('Error reading LaTeX file:', error);
-      }
-    }
-  };
-
-  const handleSubmit = () => {
-    // Here you can handle the submission of images and LaTeX code.
-    console.log('Submitted Images:', selectedImages);
-    console.log('Submitted LaTeX Code:', latexCode);
-  };
+  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div className="zip-upload-section">
-        <h2>Select Zip File with Images</h2>
-        <input
-          type="file"
-          accept=".zip"
-          onChange={handleZipFileSelection}
-        />
-        <div className="selected-images">
-          {selectedImages.length > 0 &&
-            selectedImages.map((image, index) => (
-              <p key={index}>{image.name}</p>
-            ))}
-        </div>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
       </div>
-
-      <div className="latex-upload-section">
-        <h2>Select LaTeX Code File (.txt)</h2>
-        <input
-          type="file"
-          accept=".txt"
-          onChange={handleLatexFileSelection}
-        />
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
       </div>
-
-      <button className="submit-button" onClick={handleSubmit}>
-        Submit
-      </button>
+      <p className="read-the-docs">
+        Hello
+      </p>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
