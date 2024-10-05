@@ -5,7 +5,6 @@ from PIL import Image
 import io
 import subprocess
 import os
-import numpy as np
 
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing
