@@ -78,7 +78,6 @@ function App() {
           onChange={handleLatexFileSelection}
         />
       </div>
-
       <button className="submit-button" onClick={handleSubmit}>
         Submit
       </button>
