@@ -1,6 +1,7 @@
 import os
 from flask import Flask, send_file, request, jsonify
 import pdflatex
+import requests
 
 app = Flask(__name__)
 
@@ -14,12 +15,17 @@ app.config['TEST_INPUT_FOLDER'] = TEST_INPUT_FOLDER
 
 @app.route("/")
 def home():
-    return "<h1>Welcome to the Flask Backend!</h1><p>This is the landing page of your backend.</p>"
+    condition = request.args.get('condition', 'False')
+    if condition == 'True':
+        return "<h1>Welcome to the Flask Backend!</h1><p>This is the landing page of your backend.</p>"
+    else:
+        return "<h1>Condition not met</h1>"
 
 
 @app.route("/test_conversion", methods=['GET'])
-
 def convert_test_tex_file():
+
+    send_attachment = request.args.get('send_attachment', 'False')
     
     tex_file_path = os.path.join(app.config['TEST_INPUT_FOLDER'], 'main.tex')
     
@@ -27,10 +33,15 @@ def convert_test_tex_file():
         return jsonify({"error": "Test .tex file not found"}), 404
     
     pdf_file_path = convert_tex_to_pdf(tex_file_path)
+    
     if pdf_file_path:
-        return send_file(pdf_file_path, as_attachment=True)
+        if send_attachment == 'True':
+            return send_file(pdf_file_path, as_attachment=True)
+        else:
+            return jsonify({"message": "Conversion successful"})
     else:
         return jsonify({"error": "Error converting to PDF"}), 500
+
 
 def convert_tex_to_pdf(tex_file_path):
     try:
