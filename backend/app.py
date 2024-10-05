@@ -3,8 +3,10 @@ from PIL import Image
 import os
 import io
 import openai
+from openai import OpenAI
 
 app = Flask(__name__)
+client = OpenAI()
 
 # Paths to directories and files
 IMAGE_FOLDER = 'backend/images'  # Path to the images directory
@@ -49,22 +51,57 @@ def process_images():
 
 @app.route('/process-text', methods=['GET'])
 def process_text():
-    """Read and process the LaTeX or text file."""
+    """Read the LaTeX file and use GPT to extract function definitions."""
     if not os.path.exists(TEXT_FILE):
         return 'Text file not found', 404
 
     try:
-        # Read the text file
+        # Read the LaTeX file
         with open(TEXT_FILE, 'r', encoding='utf-8') as f:
             text_data = f.read()
 
-        # Here you can process the LaTeX text if needed
-        # For example, compile the LaTeX to a PDF (if it's LaTeX code)
-        return jsonify({'message': 'Text file processed', 'content': text_data})
+        # Prepare the prompt to ask GPT to extract function definitions
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant that extracts functions from LaTeX code."},
+            {"role": "user", "content": f"Extract all the function definitions from the following LaTeX text:\n\n{text_data}"}
+        ]
+
+        # Make the API call to OpenAI GPT to process the text
+        completion = client.chat.completions.create()(
+            model="gpt-4",
+            messages=messages,
+            max_tokens=1000,  # Adjust depending on the size of your LaTeX file
+            temperature=0.2  # Lower temperature for more deterministic responses
+        )
+        print('hi')
+
+        # Get the extracted functions from the GPT response
+        # extracted_functions = response['choices'][0]['message']['content'].strip()
+        extracted_functions = completion.choices[0].message.content()
+
+        print(extracted_functions)
+
+        # Return the extracted functions as a JSON response
+        return jsonify({'message': 'Functions extracted', 'functions': extracted_functions})
 
     except Exception as e:
-        return f"Error reading text file: {str(e)}", 500
+        return f"Error processing LaTeX file: {str(e)}", 500
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# from openai import OpenAI
+
+# client = OpenAI()
+
+# completion = client.chat.completions.create(
+#     model="gpt-4o-mini",
+#     messages=[
+#         {"role": "system", "content": "You are a helpful assistant."},
+#         {"role": "user", "content": "Write a haiku about recursion in programming."}
+#     ]
+# )
+
+# # Correct print statement to access the content attribute
+# print(completion.choices[0].message.content)
