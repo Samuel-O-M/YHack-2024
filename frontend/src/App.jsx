@@ -26,15 +26,7 @@ function App() {
         </p>
       </div>
       <p className="read-the-docs">
-<<<<<<< HEAD
-<<<<<<< HEAD
-        Helloooo
-=======
-        Hello
->>>>>>> Samuel
-=======
-        Hello
->>>>>>> Samuel
+        hello
       </p>
     </>
   )
