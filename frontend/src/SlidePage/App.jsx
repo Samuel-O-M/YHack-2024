@@ -10,7 +10,14 @@ function SlidePage() {
         // Fetch images and formulas from the backend
         fetch('http://localhost:5000/images.json')  // Adjust the endpoint if necessary
             .then((response) => response.json())
-            .then((data) => setImages(data.images))
+            .then((data) => {
+                // Assuming the response contains base64 image data
+                const imageArray = data.pngfiles.map(file => ({
+                    name: file.file_name, 
+                    data: file.image_data
+                }));
+                setImages(imageArray);
+            })
             .catch((error) => console.error('Error fetching images:', error));
 
         fetch('http://localhost:5000/formulas.json')  // Adjust the endpoint if necessary
@@ -52,7 +59,7 @@ function SlidePage() {
                     images.map((image, index) => (
                         <div key={index} className="image-item">
                             <img
-                                src={`http://localhost:5000/output/${image}`}  // Ensure image path is correct
+                                src={`data:image/png;base64,${image.data}`}  // Display base64 image data
                                 alt={`Slide Image ${index + 1}`}
                             />
                         </div>
