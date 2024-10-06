@@ -1,2 +1,11 @@
 venv/
 openai_key
+tempCodeRunnerFile.py
+
+**.aux
+**.log
+**.synctex.gz
+
+**.tex
+**.pdf
+**.png
