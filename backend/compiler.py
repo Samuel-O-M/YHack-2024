@@ -43,7 +43,7 @@ def get_pdf(pdf_file_path):
         return f.read()
 
 
-def pdf_to_images(pdf_file_path, output_folder='output/slide_png'):
+def pdf_to_png(pdf_file_path, output_folder='output/slide_png'):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     
@@ -60,7 +60,7 @@ def pdf_to_images(pdf_file_path, output_folder='output/slide_png'):
         image_paths.append(image_file)
 
 
-def get_images(image_folder):
+def get_png(image_folder):
     image_paths = []
     for file_name in os.listdir(image_folder):
         if file_name.endswith('.png'):
@@ -79,5 +79,6 @@ def clear_png(image_folder):
 
 
 if __name__ == "__main__":
+    clear_png('output/slide_png')
     tex_to_pdf('output/slides.tex', output_folder='input')
-    pdf_to_images('output/slides.pdf')
+    pdf_to_png('input/slides.pdf')

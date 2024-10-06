@@ -1,10 +1,17 @@
 from flask import Flask, jsonify, request
+from compiler import *
+from images import *
+from formulas import *
+from structure import *
+from slide_creator import *
+
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
     return "Welcome to the SlideForge!"
+
 
 # initialize
 # get the images and the .tex from the paper
@@ -15,12 +22,15 @@ def home():
 def initialize():
     return 0
 
+
 # call compiler.py.
 # compile the .tex file from output using .tex and images
 # convert the .pdf to .png 
 @app.route('/compile', methods=['POST'])
 def compile():
-    return 0
+    clear_png('output/slide_png')
+    tex_to_pdf('output/slides.tex', output_folder='input')
+    pdf_to_png('input/slides.pdf')
 
 
 # add image to the slide
