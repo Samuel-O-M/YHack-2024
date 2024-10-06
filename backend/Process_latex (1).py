@@ -1,30 +1,32 @@
 import subprocess
 import os
 
-def compile_latex_to_pdf(latex_code):
-    """Compile LaTeX code to PDF and return the PDF data."""
+def compile_latex_to_pdf(latex_filename):
+    """Compile LaTeX file to PDF and return the PDF data."""
     try:
-        # Write the LaTeX code to a temporary file
-        temp_tex_filename = 'temp.tex'
-        with open(temp_tex_filename, 'w', encoding='utf-8') as f:
-            f.write(latex_code)
-
         # Run pdflatex to generate PDF
-        subprocess.run(['pdflatex', '-interaction=nonstopmode', temp_tex_filename],
+        subprocess.run(['pdflatex', '-interaction=nonstopmode', latex_filename],
                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 
+        # The output PDF will have the same name but with .pdf extension
+        pdf_filename = os.path.splitext(latex_filename)[0] + '.pdf'
+
         # Read the generated PDF into memory
-        with open('temp.pdf', 'rb') as f:
+        with open(pdf_filename, 'rb') as f:
             pdf_data = f.read()
 
-        # Clean up temporary files
-        for ext in ['tex', 'pdf', 'log', 'aux']:
-            os.remove(f'temp.{ext}')
+        # Clean up auxiliary files
+        for ext in ['aux', 'log', 'out', 'tex']:
+            temp_file = os.path.splitext(latex_filename)[0] + f'.{ext}'
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
 
         return pdf_data
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
         # Clean up even if there's an error
-        for ext in ['tex', 'pdf', 'log', 'aux']:
-            if os.path.exists(f'temp.{ext}'):
-                os.remove(f'temp.{ext}')
+        for ext in ['aux', 'log', 'out', 'pdf', 'tex']:
+            temp_file = os.path.splitext(latex_filename)[0] + f'.{ext}'
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
+        print(f'LaTeX compilation error: {e}')
         return None
