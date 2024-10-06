@@ -19,5 +19,6 @@ def list_to_json(lst, file_path = "./backend/images.json"):
     with open(file_path, 'w') as json_file:
         json.dump(dictionary, json_file, indent=4)
 
-images = process_images()
-list_of_images = list_to_json(images)
+if __name__ == "__main__":
+    images = process_images()
+    list_of_images = list_to_json(images)
