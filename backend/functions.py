@@ -1,18 +1,26 @@
-from openai import OpenAI
 import openai
+from openai import OpenAI
 import os
 import re
+from flask import Flask, jsonify, Response
+from PIL import Image
+import json
 
 IMAGE_FOLDER = 'backend/images'  # Path to the images directory
-TEXT_FILE = 'backend/text.txt'           # Path to the text file
-    
+TEXT_FILE = '../uploads/latex/latex_code.txt'       # Path to the text file
+print(TEXT_FILE)
+
+print('hi')
+with open('../openai_key', 'r') as key_file:
+    openai.api_key = key_file.read().strip()
+    print(openai.api_key)
+
 def open_text(text_file):
     with open(text_file, 'r', encoding='utf-8') as file:
         return file.read() 
 
-with open('secret_key', 'r') as key_file:
-    openai.api_key = key_file.read().strip()
-print(openai.api_key)
+text = open_text(TEXT_FILE)
+# print(text)
 
 
 def get_functions_from_latex(latex_content):
@@ -55,14 +63,20 @@ def list_equations(equations_text):
         cleaned_equations.append(cleaned_equation)
     return cleaned_equations
 
+def convert_to_json(equations_list):
+    print(equations_list)
+    json_string = json.dumps(equations_list)
+    return json_string
 
-        
 def main():
     text = open_text(TEXT_FILE)
     functions = get_functions_from_latex(text)
     split_equations_text = split_latex_equations(functions)
     list_equations_text = list_equations(split_equations_text)
-    print(list_equations_text)
+    # print(list_equations_text)
+    json_string = convert_to_json(list_equations_text)
+    # print('this is json string',json_string)
 
 if __name__ == "__main__":
     main()
+
