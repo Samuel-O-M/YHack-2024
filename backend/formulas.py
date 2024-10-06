@@ -6,7 +6,19 @@ from flask import Flask, jsonify, Response
 from PIL import Image
 import json
 
-TEXT_FILE = './backend/input/test.tex'       # Path to the text file
+
+def get_file():
+    input_dir = "./backend/input"
+    tex_files = [os.path.join(input_dir, file) for file in os.listdir(input_dir) if file.endswith('.tex')]
+    tex_files = [file.replace('\\', '/') for file in tex_files]
+    return ', '.join(tex_files) if tex_files else None
+    # return tex_files
+
+file  = get_file()
+print(file)
+    
+
+# TEXT_FILE = './backend/input/test.tex'       # Path to the text file
 def load_openai_key(key_file_path='./backend/openai_key'):
     try:
         with open(key_file_path, 'r') as key_file:
@@ -74,7 +86,7 @@ def list_to_json(lst, file_path = "./backend/formulas.json"):
     with open(file_path, 'w') as json_file:
         json.dump(dictionary, json_file, indent=4)
         
-def process_formulas(tex_file_path, formulas_file_path="./backend/formulas.json"):
+def process_formulas(tex_file_path):
     """
     Main function to process the LaTeX file and extract formulas.
     
@@ -82,6 +94,14 @@ def process_formulas(tex_file_path, formulas_file_path="./backend/formulas.json"
         tex_file_path (str): Path to the LaTeX `.tex` file.
         formulas_file_path (str): Path to save the formulas JSON file.
     """
+    text = open_text(tex_file_path)
+    api_key = load_openai_key()
+    functions = get_functions_from_latex(text, api_key)
+    split_equations_text = split_latex_equations(functions)
+    list_equations_text = list_equations(split_equations_text)
+    json_string = list_to_json(list_equations_text)
+
+
     # Load OpenAI API key
     api_key = load_openai_key()
     if not api_key:
@@ -95,7 +115,7 @@ def process_formulas(tex_file_path, formulas_file_path="./backend/formulas.json"
         return
     
     # Extract functions using OpenAI's API
-    functions = get_functions_from_latex(latex_content)
+    functions = get_functions_from_latex(latex_content, api_key)
     if not functions:
         print("No functions extracted. Skipping formula processing.")
         return
@@ -107,18 +127,23 @@ def process_formulas(tex_file_path, formulas_file_path="./backend/formulas.json"
     list_equations_text = list_equations(split_equations_text)
     
     # Save the list of formulas to JSON
-    list_to_json(list_equations_text, formulas_file_path)
-
-def main():
-    text = open_text(TEXT_FILE)
-    api_key = load_openai_key()
-    functions = get_functions_from_latex(text, api_key)
-    print(functions)
-    split_equations_text = split_latex_equations(functions)
-    list_equations_text = list_equations(split_equations_text)
-    json_string = list_to_json(list_equations_text)
+    list_to_json(list_equations_text)
 
 
 if __name__ == "__main__":
-    main()
+    # Define the path to the LaTeX file and the formulas JSON file
+    tex_file_path = "./backend/input/paper.tex"
+    process_formulas(tex_file_path)
+
+
+
+# def main():
+#     file = get_file()
+#     text = open_text(file)
+#     api_key = load_openai_key()
+#     functions = get_functions_from_latex(text, api_key)
+#     print(functions)
+#     split_equations_text = split_latex_equations(functions)
+#     list_equations_text = list_equations(split_equations_text)
+#     json_string = list_to_json(list_equations_text)
 
