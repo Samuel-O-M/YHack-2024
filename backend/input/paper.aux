@@ -1,0 +1,86 @@
+\relax 
+\citation{Cerezo2021}
+\citation{Markowitz1952}
+\citation{Sharpe1964}
+\citation{Boyd2004}
+\citation{Moll2018}
+\citation{Hodson2019}
+\citation{Peruzzo2014,McClean2016}
+\citation{Cerezo2021}
+\citation{Tilly2022}
+\newlabel{FirstPage}{{}{1}{}{}{}}
+\@writefile{toc}{\contentsline {title}{Comparative Analysis of Quantum Algorithm for \\Portfolio Optimization: A Study of VQE}{1}{}}
+\@writefile{toc}{\contentsline {abstract}{Abstract}{1}{}}
+\newlabel{sec:level1}{{I}{1}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Theory}{1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}Variational Quantum Algorithm Overview}{1}{}}
+\citation{Tilly2022}
+\citation{Tilly2022}
+\citation{Hodson2019}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  The VQE Pipeline — Illustrative formulas do not guarantee best practices. (1) Pre-processing: (a) Hamiltonian representation: Initial step defining basis functions for Hamiltonian as a quantum observable; (b) Encoding: Second step encoding Hamiltonian into measurable operators on a Quantum Computer via qubit wavefunction, mapping fermionic to spin operators; (c) Grouping and measurement strategy: Third step involves grouping operators for simultaneous measurement, necessitating circuit additions for basis rotation and establishing measurement weighting; (d) State initialization: Final pre-processing step determining the state initialization for the ansatz — (2) The VQE loop: (a) Ansatz and trial state preparation: Initial step applying ansatz to initialized qubit register, requiring parameter initialization before the first iteration; (b) Basis rotation and measurement: Prepared trial wave function is rotated into the measurement basis or a diagonal basis of specific Pauli strings; (c) Observable computation: Expectation value computation is determined by the optimization strategy, involving weighted summation on conventional hardware or machine learning techniques; (d) Parameters update: Updates to ansatz parameters are computed based on observables and optimization strategies, initiating a new VQE iteration — (3) Post-processing, Error mitigation: Additional computation layer aims to reduce quantum noise impact on measurement results \cite  {Tilly2022}.}}{3}{}}
+\newlabel{fig:pipeline}{{1}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}Quantum Formulation of Portfolio Optimization}{3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Methodology}{4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}Portfolio Choices}{4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  This figure shows the price evolution of 25 randomly generated stocks over a specified time horizon (measured in days). Each line corresponds to a distinct stock (STOCK0 to STOCK24). }}{5}{}}
+\newlabel{fig:data}{{2}{5}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}Qiskit Implementation}{5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  This figure compares Finite Difference, SPSA, Natural Gradient, and Analytic Gradient with step size \( \mu = 0.1 \). The estimated energy decreases quickly within the first 10 iterations for all methods. }}{5}{}}
+\newlabel{fig:data}{{3}{5}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Convergence Analysis of the SU2 Circuit using three entanglement protocols: linear, cyclic, and full. }}{5}{}}
+\newlabel{fig:data}{{4}{5}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Convergence Analysis of the ZZ Feature Map Circuit using three entanglement protocols: linear, cyclic, and full. }}{6}{}}
+\newlabel{fig:data}{{5}{6}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces  Convergence Analysis of the Two Local Circuit using three entanglement protocols: linear, cyclic, and full. }}{6}{}}
+\newlabel{fig:data}{{6}{6}{}{}{}}
+\citation{Moll2018}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  Transpilation is the process of rewriting a given input circuit to match the topology of a specific quantum device, and/or to optimize the circuit for execution on present day noisy quantum systems.}}{7}{}}
+\newlabel{fig:data}{{7}{7}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C}IBM Hardware Implementation}{7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces  This figure presents the singular qubit gate linear decay of the error rate as a function of the number of gates, \(k\), with varying numbers of qubits \(r\). }}{7}{}}
+\newlabel{fig:data}{{8}{7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces  This figure presents the exponential decay of \(k\)-GHZ states as a function of the number of gates, \(k\), with varying numbers of qubits per gate \(r\). }}{7}{}}
+\newlabel{fig:data}{{9}{7}{}{}{}}
+\citation{Boyd2004}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Performance Metrics and Evaluation}{8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}Global Minimum Variance Portfolio (GMVP)}{8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}Minimum Eigensolver}{8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C}Monte Carlo Simulation}{9}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Performance Metrics of Portfolio Optimization Algorithms}}{9}{}}
+\newlabel{tab:performance_metrics}{{I}{9}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces  Expected Return of GMVP: -0.0641\% Risk of GMVP: 0.00889618731780511 Expected Return of Minimum Eigensolver: 2.0669\% Risk of Minimum Eigensolver: 0.03754046707115206 Expected Return of Optimal Portfolio (VQE): 1.2048\% Risk of Optimal Portfolio (VQE): 0.08113489865004302 Expected Return of Monte Carlo: 12.4791\% Risk of Monte Carlo: 0.17700860220543}}{9}{}}
+\newlabel{fig:montecarlo}{{10}{9}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion}{10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}Time Complexity}{10}{}}
+\citation{McClean2018}
+\citation{Grant2019}
+\citation{Markowitz1952}
+\citation{Boyd2004}
+\citation{Peruzzo2014}
+\citation{McClean2016}
+\citation{Woerner2019}
+\citation{Hodson2019}
+\citation{Kandala2017}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B}Space Complexity}{12}{}}
+\citation{Preskill2018}
+\citation{Harrow2009}
+\citation{Kandala2017}
+\citation{Farhi2000,Grover1996}
+\citation{Farhi2014}
+\citation{Cerezo2021}
+\citation{Shor1997}
+\citation{Devitt2016}
+\citation{Tannu2019}
+\citation{IBMQBrisbane}
+\citation{Krinner2019}
+\citation{Woerner2019}
+\citation{Bharti2022}
+\bibdata{paperNotes,references}
+\bibstyle{unsrt}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{13}{}}
+\@writefile{toc}{\appendix }
+\@writefile{toc}{\contentsline {section}{\numberline {}Code Availability}{13}{}}
+\newlabel{LastPage}{{}{13}{}{}{}}
+\gdef \@abspage@last{13}
