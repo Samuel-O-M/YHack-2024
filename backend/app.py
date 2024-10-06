@@ -46,11 +46,11 @@ def initialize():
         with open('images.json', 'w') as json_file:
             json.dump(images_json_data, json_file)
 
-        # process_structure('output/paper.tex')
-        # process_formulas('output/paper.tex')
+        # process_structure('input/paper.tex')
+        # process_formulas('input/paper.tex')
 
-        # with open('structure.json', 'r') as json_file:
-        #     data = json.load(json_file)
+        with open('structure.json', 'r') as json_file:
+            data = json.load(json_file)
 
         slide_creator = SlideCreator(
             title='title',

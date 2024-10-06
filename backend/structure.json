@@ -1,0 +1,34 @@
+{
+    "title": [
+        "Comparative Analysis of Quantum Algorithm for Portfolio Optimization: A Study of VQE"
+    ],
+    "sections": [
+        "1. Introduction",
+        "2. Theory",
+        "1. Variational Quantum Algorithm Overview",
+        "2. Quantum Formulation of Portfolio Optimization",
+        "3. Methodology",
+        "1. Portfolio Choices",
+        "2. Qiskit Implementation",
+        "3. IBM Hardware Implementation",
+        "4. Performance Metrics and Evaluation",
+        "1. Global Minimum Variance Portfolio (GMVP)",
+        "2. Minimum Eigensolver",
+        "3. Monte Carlo Simulation",
+        "5. Results",
+        "6. Discussion",
+        "1. Time Complexity",
+        "2. Space Complexity",
+        "7. Conclusion",
+        "8. Code Availability"
+    ],
+    "name": [
+        "- Michael Cai",
+        "- Justin Beltran",
+        "- Chaipat Tirapongprasert",
+        "- Hyeon-Tae Hwang",
+        "- Yoonsuk Choi",
+        "- Farhaan Siddiqui"
+    ],
+    "date": "\\today"
+}
