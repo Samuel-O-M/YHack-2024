@@ -66,7 +66,7 @@ function App() {
     data.append('textfile', latexFile);
   
     // Send the data to the backend
-    fetch('http://localhost:5000/upload', {
+    fetch('http://localhost:5173/upload', {
       method: 'POST',
       body: data,
     })
