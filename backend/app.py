@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, send_from_dire
+from flask import Flask, jsonify, request
 from compiler import *
 from images import *
 from formulas import *

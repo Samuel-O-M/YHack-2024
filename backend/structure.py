@@ -83,9 +83,9 @@ def process_sections(paper_name, section_titles, authors_names, file_path = "./b
     
     # Create a dictionary with each part as a list
     parsed_data = {
-        'paper_name': [paper_name],  # Paper name as a list
-        'section_titles': section_titles_list,  # Processed section titles list
-        'authors_names': authors_names_list  # Processed authors names list
+        'title': [paper_name],  # Paper name as a list
+        'sections': section_titles_list,  # Processed section titles list
+        'name': authors_names_list  # Processed authors names list
     }
     
     # Convert the dictionary to JSON format and save it
