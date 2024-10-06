@@ -2,9 +2,20 @@ venv/
 openai_key
 tempCodeRunnerFile.py
 
+__pycache__/
+backend/__pycache__/
+
 **.aux
 **.log
 **.synctex.gz
+**.out
+**.toc
+**.nav
+**.snm
+**.dvi
+**.bbl
+**.fls
+
 
 **.tex
 **.pdf
