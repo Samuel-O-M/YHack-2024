@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, request, send_from_dire
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from compiler import *
 from images import *
 from formulas import *
@@ -7,16 +8,11 @@ from slide_creator import *
 import os
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
     return "Welcome to the SlideForge!"
-
-@app.route('/output/<filename>')
-def get_output_file(filename):
-    return send_from_directory('output', filename)
-
-
 
 # initialize
 # get the images and the .tex from the paper
