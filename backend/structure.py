@@ -5,8 +5,15 @@ import json
 
 
 TEXT_FILE = './backend/output/test.tex'       # Path to the text file
-with open('./backend/openai_key', 'r') as key_file:
-    openai.api_key = key_file.read().strip()
+
+def load_openai_key(key_file_path='./backend/openai_key'):
+    try:
+        with open(key_file_path, 'r') as key_file:
+            openai.api_key = key_file.read().strip()
+            return openai.api_key
+    except FileNotFoundError:
+        print(f"Error: The file '{key_file_path}' was not found.")
+        return None
 
 def open_text(text_file):
     with open(text_file, 'r', encoding='utf-8') as file:
@@ -14,8 +21,8 @@ def open_text(text_file):
 
 
 
-def get_sections_from_latex(latex_content):
-    client = OpenAI()
+def get_sections_from_latex(latex_content, api_key):
+    client = OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -29,8 +36,8 @@ def get_sections_from_latex(latex_content):
     return sections
 
 
-def get_authors_from_latex(latex_content):
-    client = OpenAI()
+def get_authors_from_latex(latex_content, api_key):
+    client = OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -44,8 +51,8 @@ def get_authors_from_latex(latex_content):
     return authors
 
 
-def get_title_from_latex(latex_content):
-    client = OpenAI()
+def get_title_from_latex(latex_content, api_key):
+    client = OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -83,10 +90,11 @@ def process_sections(paper_name, section_titles, authors_names, file_path = "./b
 
 
 def main():
+    api_key = load_openai_key()
     latex_content = open_text(TEXT_FILE)
-    sections = get_sections_from_latex(latex_content)
-    authors = get_authors_from_latex(latex_content)
-    title = get_title_from_latex(latex_content)
+    sections = get_sections_from_latex(latex_content, api_key)
+    authors = get_authors_from_latex(latex_content, api_key)
+    title = get_title_from_latex(latex_content, api_key)
     parsed_sections = process_sections(title, sections, authors)
 
 if __name__ == "__main__":

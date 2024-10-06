@@ -7,21 +7,27 @@ from PIL import Image
 import json
 
 TEXT_FILE = './backend/output/test.tex'       # Path to the text file
+def load_openai_key(key_file_path='./backend/openai_key'):
+    try:
+        with open(key_file_path, 'r') as key_file:
+            openai.api_key = key_file.read().strip()
+            return openai.api_key
+    except FileNotFoundError:
+        print(f"Error: The file '{key_file_path}' was not found.")
+        return None
 
-with open('./backend/openai_key', 'r') as key_file:
-    openai.api_key = key_file.read().strip()
-    print(openai.api_key)
+
 
 def open_text(text_file):
     with open(text_file, 'r', encoding='utf-8') as file:
         return file.read() 
 
-text = open_text(TEXT_FILE)
+# text = open_text(TEXT_FILE)
 
 
 
-def get_functions_from_latex(latex_content):
-    client = OpenAI()
+def get_functions_from_latex(latex_content, api_key):
+    client = OpenAI(api_key=api_key)
 
     response = client.chat.completions.create(
         model="gpt-4o",
@@ -70,7 +76,8 @@ def list_to_json(lst, file_path = "./backend/formulas.json"):
         
 def main():
     text = open_text(TEXT_FILE)
-    functions = get_functions_from_latex(text)
+    api_key = load_openai_key()
+    functions = get_functions_from_latex(text, api_key)
     print(functions)
     split_equations_text = split_latex_equations(functions)
     list_equations_text = list_equations(split_equations_text)
