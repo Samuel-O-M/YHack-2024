@@ -4,6 +4,22 @@
         "E_{\\text{VQE}} = \\min_{\\theta} \\bra{0}U^\\dagger(\\theta) \\hat{H} U(\\theta)\\ket{0}.",
         "\\hat{P}_a \\in \\{I, X, Y, Z\\}^{\\otimes N},",
         "\\hat{H} = \\sum_a w_a \\hat{P}_a,",
-        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a \\bra{0}U^\\dagger(\\theta) \\hat{P}_a U(\\theta)\\ket{0}."
+        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a \\bra{0}U^\\dagger(\\theta) \\hat{P}_a U(\\theta)\\ket{0},",
+        "E_{P_a} = \\bra{0}U^\\dagger(\\theta) \\hat{P}_a U(\\theta)\\ket{0}",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a E_{P_a}",
+        "\\text{Cov}(A,B) = \\frac{1}{n-1} \\sum_{t=1}^{n} \\left( R_{A,t} - \\bar{R}_A \\right)\\left( R_{B,t} - \\bar{R}_B \\right)",
+        "\\max_b L(b) : \\max_b \\left( \\mu''^T b - b^T \\Sigma'' b - \\lambda \\left(P''^T b - 1 \\right)^2 \\right),",
+        "L(b) = \\sum_i \\mu''_i b_i - \\sum_{i,j} \\Sigma''_{i,j} b_i b_j - \\lambda \\left(\\sum_i P''_i b_i - 1\\right)^2.",
+        "L(s) = \\sum_i h_i s_i + \\sum_{i,j} J_{i,j} s_i s_j + \\lambda \\left( \\sum_i \\pi_i s_i - \\beta \\right)^2,",
+        "H = \\sum_i h_i Z_i + \\sum_{i,j} J_{i,j} Z_i \\otimes Z_j + \\lambda \\left( \\sum_i \\pi_i Z_i - \\beta \\right)^2.",
+        "w_i^{(k)} \\in [0, 1] \\quad \\text{and} \\quad \\sum_{i=1}^{n} w_i^{(k)} = 1",
+        "\\mathbf{w}^{(k)} = B \\cdot \\mathbf{w}^{(k)}",
+        "R^{(k)} = \\mathbf{w}^{(k)^\\top} \\mathbf{r} = \\sum_{i=1}^{n} w_i^{(k)} r_i",
+        "\\text{Risk}^{(k)} = \\mathbf{w}^{(k)^\\top} \\Sigma \\mathbf{w}^{(k)}",
+        "\\text{StdDev}^{(k)} = \\sqrt{\\text{Risk}^{(k)}}",
+        "\\text{AdjustedReturn}^{(k)} = R^{(k)} - \\lambda \\cdot \\text{Risk}^{(k)}",
+        "\\mathbf{w}^* = \\arg \\max_{\\mathbf{w}^{(k)}} \\left( R^{(k)} - \\lambda \\cdot \\text{Risk}^{(k)} \\right)",
+        "R^* = \\mathbf{w}^{*^\\top} \\mathbf{r}",
+        "\\text{Risk}^* = \\mathbf{w}^{*^\\top} \\Sigma \\mathbf{w}^*"
     ]
 }

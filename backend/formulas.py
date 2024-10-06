@@ -71,6 +71,7 @@ def list_to_json(lst, file_path = "./backend/formulas.json"):
 def main():
     text = open_text(TEXT_FILE)
     functions = get_functions_from_latex(text)
+    print(functions)
     split_equations_text = split_latex_equations(functions)
     list_equations_text = list_equations(split_equations_text)
     json_string = list_to_json(list_equations_text)
