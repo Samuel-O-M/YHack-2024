@@ -1,9 +1,9 @@
 {
     "formulas": [
-      "f(x) = x^2",
-      "g(x) = 2x + 5",
-      "h(x) = sin(x)",
-      "p(x) = x^3 - 4x + 1"
+        "E_0 \\leq \\frac{\\bra{\\psi}\\hat{H}\\ket{\\psi}}{\\bra{\\psi}\\psi\\rangle}.",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\bra{0}U^\\dagger(\\theta) \\hat{H} U(\\theta)\\ket{0}.",
+        "\\hat{P}_a \\in \\{I, X, Y, Z\\}^{\\otimes N},",
+        "\\hat{H} = \\sum_a w_a \\hat{P}_a,",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a \\bra{0}U^\\dagger(\\theta) \\hat{P}_a U(\\theta)\\ket{0}."
     ]
 }
-  
