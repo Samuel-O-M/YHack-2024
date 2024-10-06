@@ -14,9 +14,6 @@ def get_file():
     return ', '.join(tex_files) if tex_files else None
     # return tex_files
 
-file  = get_file()
-print(file)
-    
 
 # TEXT_FILE = './backend/input/test.tex'       # Path to the text file
 def load_openai_key(key_file_path='./backend/openai_key'):
