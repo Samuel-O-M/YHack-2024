@@ -1,95 +1,56 @@
-import { useEffect, useState } from 'react';
-import './SlidePage.css';  // Ensure the correct CSS file is linked
+import React, { useState, useEffect } from 'react';
+import './SlidePage.css';
 
-function SlidePage() {
-    const [slides, setSlides] = useState([]);
-    const [images, setImages] = useState([]);
-    const [formulas, setFormulas] = useState([]);
+// Import your images
+import slideImage1 from '../assets/images/slide1.png';
+import slideImage2 from '../assets/images/slide2.png';
+import slideImage3 from '../assets/images/slide3.png';
 
-    useEffect(() => {
-        // Fetch images and formulas from the backend
-        fetch('http://localhost:5000/images.json')  // Adjust the endpoint if necessary
-            .then((response) => response.json())
-            .then((data) => {
-                // Assuming the response contains base64 image data
-                const imageArray = data.pngfiles.map(file => ({
-                    name: file.file_name, 
-                    data: file.image_data
-                }));
-                setImages(imageArray);
-            })
-            .catch((error) => console.error('Error fetching images:', error));
+const SlidePage = () => {
+  const [slides, setSlides] = useState([slideImage1, slideImage2, slideImage3]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [latexFunctions, setLatexFunctions] = useState('');  // New state for LaTeX functions
 
-        fetch('http://localhost:5000/formulas.json')  // Adjust the endpoint if necessary
-            .then((response) => response.json())
-            .then((data) => setFormulas(data.formulas))
-            .catch((error) => console.error('Error fetching formulas:', error));
+  // Function to fetch LaTeX functions from API
+  const fetchLatexFunctions = async () => {
+    const latexContent = `Your LaTeX content here`;  // Replace with actual LaTeX content
+    const apiKey = 'your-api-key-here';
+    const functions = await getFunctionsFromLatex(latexContent, apiKey);
+    setLatexFunctions(functions);  // Store LaTeX functions in state
+  };
 
-        // Optionally, fetch slides if they exist as a separate resource
-        fetch('http://localhost:5000/slide_data')  // Example endpoint for slides
-            .then((response) => response.json())
-            .then((data) => setSlides(data.slides))
-            .catch((error) => console.error('Error fetching slides:', error));
-    }, []);
+  useEffect(() => {
+    fetchLatexFunctions();  // Fetch LaTeX functions when the component mounts
+  }, []);
 
-    return (
-        <div className="slide-page">
-            {/* Slides Section */}
-            <div className="slide-section">
-                <h2>Slides</h2>
-                {slides.length > 0 ? (
-                    slides.map((slide, index) => (
-                        <div key={index} className="slide-item">
-                            <h3>{`Slide ${index + 1}`}</h3>
-                            <p>{slide}</p>
-                        </div>
-                    ))
-                ) : (
-                    <div className="slide-placeholder">
-                        <h3>Slides</h3>
-                        <p>No slides available yet. Please upload or check back later.</p>
-                    </div>
-                )}
-            </div>
+  const navigate = (setter, current, items, increment) => {
+    setter((current + increment + items.length) % items.length);
+  };
 
-            {/* Images Section */}
-            <div className="image-section">
-                <h2>Images</h2>
-                {images.length > 0 ? (
-                    images.map((image, index) => (
-                        <div key={index} className="image-item">
-                            <img
-                                src={`data:image/png;base64,${image.data}`}  // Display base64 image data
-                                alt={`Slide Image ${index + 1}`}
-                            />
-                        </div>
-                    ))
-                ) : (
-                    <div className="image-placeholder">
-                        <h3>Images</h3>
-                        <p>No images available yet. Please upload or check back later.</p>
-                    </div>
-                )}
-            </div>
-
-            {/* Formulas Section */}
-            <div className="formula-section">
-                <h2>Formulas</h2>
-                {formulas.length > 0 ? (
-                    formulas.map((formula, index) => (
-                        <div key={index} className="formula-item">
-                            <p>{formula}</p>
-                        </div>
-                    ))
-                ) : (
-                    <div className="formula-placeholder">
-                        <h3>Formulas</h3>
-                        <p>No formulas available yet. Please upload or check back later.</p>
-                    </div>
-                )}
-            </div>
+  return (
+    <div className="slide-page">
+      <div className="main-content">
+        <div className="slide-section">
+          <div className="content">
+            <img src={slides[currentSlide]} alt={`Slide ${currentSlide + 1}`} />
+          </div>
+          <div className="navigation">
+            <button onClick={() => navigate(setCurrentSlide, currentSlide, slides, -1)}>&lt;</button>
+            <button>+</button>
+            <button onClick={() => navigate(setCurrentSlide, currentSlide, slides, 1)}>&gt;</button>
+          </div>
         </div>
-    );
-}
+      </div>
+      <div className="side-content">
+        <div className="paragraph-section">
+          <div className="content">
+            {/* Display extracted LaTeX functions */}
+            <p className="latex-functions">{latexFunctions}</p>  
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default SlidePage;
