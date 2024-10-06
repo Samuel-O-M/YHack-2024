@@ -7,6 +7,7 @@
 
 import subprocess
 import os
+import base64
 import shutil
 from pdf2image import convert_from_path  # Requires pdf2image module
 
@@ -61,11 +62,17 @@ def pdf_to_png(pdf_file_path, output_folder='output/slide_png'):
 
 
 def get_png(image_folder):
-    image_paths = []
+    image_data = []
     for file_name in os.listdir(image_folder):
         if file_name.endswith('.png'):
-            image_paths.append(os.path.join(image_folder, file_name))
-    return image_paths
+            file_path = os.path.join(image_folder, file_name)
+            with open(file_path, 'rb') as image_file:
+                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+                image_data.append({
+                    'file_name': file_name,
+                    'image_data': encoded_string
+                })
+    return image_data
 
 
 def clear_pdf(pdf_file_path):
@@ -82,3 +89,4 @@ if __name__ == "__main__":
     clear_png('output/slide_png')
     tex_to_pdf('output/slides.tex', output_folder='input')
     pdf_to_png('input/slides.pdf')
+    get_pdf('input/slides.pdf')
