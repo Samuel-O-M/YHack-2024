@@ -6,15 +6,16 @@ import openai
 from openai import OpenAI
 
 app = Flask(__name__)
-client = OpenAI()
+
 
 # Paths to directories and files
 IMAGE_FOLDER = 'backend/images'  # Path to the images directory
 TEXT_FILE = 'backend/text.txt'           # Path to the text file
 
+
 with open('secret_key', 'r') as key_file:
     openai.api_key = key_file.read().strip()
-# print(openai.api_key)
+print(openai.api_key)
 # openai.api_key = 'your-openai-api-key'
 
 @app.route('/process-images', methods=['GET'])
@@ -49,43 +50,63 @@ def process_images():
     return jsonify({'message': 'Images processed successfully', 'image_count': len(processed_images)})
 
 
-@app.route('/process-text', methods=['GET'])
-def process_text():
-    """Read the LaTeX file and use GPT to extract function definitions."""
-    if not os.path.exists(TEXT_FILE):
-        return 'Text file not found', 404
-
-    try:
+def open_text(text_file):
         # Read the LaTeX file
-        with open(TEXT_FILE, 'r', encoding='utf-8') as f:
-            text_data = f.read()
+    with open(text_file, 'r', encoding='utf-8') as f:
+        text_data = f.read().strip()
+    return text_data
 
-        # Prepare the prompt to ask GPT to extract function definitions
-        messages = [
-            {"role": "system", "content": "You are a helpful assistant that extracts functions from LaTeX code."},
-            {"role": "user", "content": f"Extract all the function definitions from the following LaTeX text:\n\n{text_data}"}
+# text = open_text(TEXT_FILE)
+# print(text)
+
+
+
+
+def read_latex_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+
+def read_api_key(key_file_path):
+    with open(key_file_path, 'r', encoding='utf-8') as key_file:
+        return key_file.read().strip()
+
+def get_sections_from_latex(latex_content, api_key):
+    client = OpenAI(api_key=api_key)
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant for extracting LaTeX document structures."},
+            {"role": "user", "content": f"Extract and list all the section titles from the following LaTeX document: \n\n{latex_content}"}
         ]
+    )
 
-        # Make the API call to OpenAI GPT to process the text
-        completion = client.chat.completions.create()(
-            model="gpt-4",
-            messages=messages,
-            max_tokens=1000,  # Adjust depending on the size of your LaTeX file
-            temperature=0.2  # Lower temperature for more deterministic responses
-        )
-        print('hi')
+    sections = response.choices[0].message.content.strip()
+    return sections
 
-        # Get the extracted functions from the GPT response
-        # extracted_functions = response['choices'][0]['message']['content'].strip()
-        extracted_functions = completion.choices[0].message.content()
-
-        print(extracted_functions)
+@app.route('/process-text', methods=['GET'])
+def process_text(text_data):
+        # Prepare the prompt to ask GPT to extract function definitions
+    client = OpenAI()
+    # Make the API call to OpenAI GPT to process the text
+    completion = client.chat.completions.create()(
+        model="gpt-4o-mini",
+        messages = [
+        {"role": "system", "content": "You are a helpful assistant that extracts functions from LaTeX code."},
+        {"role": "user", "content": f"Extract all the function definitions from the following LaTeX text:\n\n{text_data}"}
+    ]
+    )
+    # Get the extracted functions from the GPT response
+    # extracted_functions = response['choices'][0]['message']['content'].strip()
+    extracted_functions = completion.choices[0].message.content.strip()
+    return extracted_functions
 
         # Return the extracted functions as a JSON response
-        return jsonify({'message': 'Functions extracted', 'functions': extracted_functions})
+        # return jsonify({'message': 'Functions extracted', 'functions': extracted_functions})
 
-    except Exception as e:
-        return f"Error processing LaTeX file: {str(e)}", 500
+    
+text = process_text(TEXT_FILE)
+print(text)
 
 # if __name__ == '__main__':
 #     app.run(debug=True)
