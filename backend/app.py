@@ -52,14 +52,22 @@ def initialize():
         # with open('structure.json', 'r') as json_file:
         #     data = json.load(json_file)
 
-        # slide_creator = SlideCreator(
-        #     title=data['title'],
-        #     name=data['author'],
-        #     date=data['date'],
-        #     sections=data['sections']
-        # )
+        slide_creator = SlideCreator(
+            title='title',
+            name='name',
+            date='date',
+            sections=['Introduction', 'Methods', 'Results', 'Discussion']
+        )
 
-        return jsonify({'status': 'success', 'message': 'Initialization completed successfully.'}), 200
+        tex_to_pdf('output/slides.tex', output_folder='output')
+        pdf_to_png('output/slides.pdf')
+        png_files = get_png('output/slide_png')
+
+        return jsonify({
+            'status': 'success',
+            'message': 'Initialization completed successfully.',
+            'png_files': png_files
+        }), 200
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': f'An error occurred: {str(e)}'}), 500
@@ -73,9 +81,8 @@ def initialize():
 def compile():
     try:
         clear_png('output/slide_png')
-        tex_to_pdf('output/slides.tex', output_folder='input')
-        pdf_to_png('input/slides.pdf')
-
+        tex_to_pdf('output/slides.tex', output_folder='output')
+        pdf_to_png('output/slides.pdf')
         png_files = get_png('output/slide_png')
 
         return jsonify({
