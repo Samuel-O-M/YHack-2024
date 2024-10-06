@@ -3,6 +3,14 @@ import pdflatex
 from pdf2image import convert_from_path
 from io import BytesIO
 
+# what this should have
+# one function that converts .tex (in output) to .pdf (in output)
+# one function that gets the .tex file (in output)
+# one function that gets the .pdf file (in output)
+# one function that converts the .pdf to images and stores them (in output/slide_png)
+# one function that gets the images (in output/slide_png)
+
+
 folder = 'output'
 os.makedirs(folder, exist_ok=True)
 
