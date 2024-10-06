@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_dire
 from compiler import *
 from images import *
 from formulas import *
@@ -11,6 +11,11 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     return "Welcome to the SlideForge!"
+
+@app.route('/output/<filename>')
+def get_output_file(filename):
+    return send_from_directory('output', filename)
+
 
 
 # initialize

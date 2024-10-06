@@ -1,75 +1,88 @@
-import React, { useState } from 'react';
-import './SlidePage.css';
+import { useEffect, useState } from 'react';
+import './SlidePage.css';  // Ensure the correct CSS file is linked
 
-// Import your images
-import slideImage1 from '../assets/images/slide1.png'; // Replace with actual path
-import slideImage2 from '../assets/images/slide2.png';
-import slideImage3 from '../assets/images/slide3.png';
+function SlidePage() {
+    const [slides, setSlides] = useState([]);
+    const [images, setImages] = useState([]);
+    const [formulas, setFormulas] = useState([]);
 
-import sideImage1 from '../assets/images/slide1.png';
-import sideImage2 from '../assets/images/slide2.png';
-import sideImage3 from '../assets/images/slide3.png';
+    useEffect(() => {
+        // Fetch images and formulas from the backend
+        fetch('http://localhost:5000/images.json')  // Adjust the endpoint if necessary
+            .then((response) => response.json())
+            .then((data) => setImages(data.images))
+            .catch((error) => console.error('Error fetching images:', error));
 
-import paragraphImage1 from '../assets/images/slide1.png';
-import paragraphImage2 from '../assets/images/slide2.png';
-import paragraphImage3 from '../assets/images/slide3.png';
+        fetch('http://localhost:5000/formulas.json')  // Adjust the endpoint if necessary
+            .then((response) => response.json())
+            .then((data) => setFormulas(data.formulas))
+            .catch((error) => console.error('Error fetching formulas:', error));
 
-const SlidePage = () => {
-  const [slides, setSlides] = useState([slideImage1, slideImage2, slideImage3]);
-  const [images, setImages] = useState([sideImage1, sideImage2, sideImage3]);
-  const [paragraphs, setParagraphs] = useState([paragraphImage1, paragraphImage2, paragraphImage3]);
+        // Optionally, fetch slides if they exist as a separate resource
+        fetch('http://localhost:5000/slide_data')  // Example endpoint for slides
+            .then((response) => response.json())
+            .then((data) => setSlides(data.slides))
+            .catch((error) => console.error('Error fetching slides:', error));
+    }, []);
 
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [currentImage, setCurrentImage] = useState(0);
-  const [currentParagraph, setCurrentParagraph] = useState(0);
+    return (
+        <div className="slide-page">
+            {/* Slides Section */}
+            <div className="slide-section">
+                <h2>Slides</h2>
+                {slides.length > 0 ? (
+                    slides.map((slide, index) => (
+                        <div key={index} className="slide-item">
+                            <h3>{`Slide ${index + 1}`}</h3>
+                            <p>{slide}</p>
+                        </div>
+                    ))
+                ) : (
+                    <div className="slide-placeholder">
+                        <h3>Slides</h3>
+                        <p>No slides available yet. Please upload or check back later.</p>
+                    </div>
+                )}
+            </div>
 
-  const navigate = (setter, current, items, increment) => {
-    setter((current + increment + items.length) % items.length);
-  };
+            {/* Images Section */}
+            <div className="image-section">
+                <h2>Images</h2>
+                {images.length > 0 ? (
+                    images.map((image, index) => (
+                        <div key={index} className="image-item">
+                            <img
+                                src={`http://localhost:5000/output/${image}`}  // Ensure image path is correct
+                                alt={`Slide Image ${index + 1}`}
+                            />
+                        </div>
+                    ))
+                ) : (
+                    <div className="image-placeholder">
+                        <h3>Images</h3>
+                        <p>No images available yet. Please upload or check back later.</p>
+                    </div>
+                )}
+            </div>
 
-  const addSlide = () => {
-    setSlides([...slides, slideImage1]); // Add a placeholder or new slide image
-    setCurrentSlide(slides.length);
-  };
-
-  return (
-    <div className="slide-page">
-      <div className="main-content">
-        <div className="slide-section">
-          <div className="content">
-            <img src={slides[currentSlide]} alt={`Slide ${currentSlide + 1}`} />
-          </div>
-          <div className="navigation">
-            <button onClick={() => navigate(setCurrentSlide, currentSlide, slides, -1)}>&lt;</button>
-            <button onClick={addSlide}>+</button>
-            <button onClick={() => navigate(setCurrentSlide, currentSlide, slides, 1)}>&gt;</button>
-          </div>
+            {/* Formulas Section */}
+            <div className="formula-section">
+                <h2>Formulas</h2>
+                {formulas.length > 0 ? (
+                    formulas.map((formula, index) => (
+                        <div key={index} className="formula-item">
+                            <p>{formula}</p>
+                        </div>
+                    ))
+                ) : (
+                    <div className="formula-placeholder">
+                        <h3>Formulas</h3>
+                        <p>No formulas available yet. Please upload or check back later.</p>
+                    </div>
+                )}
+            </div>
         </div>
-      </div>
-      <div className="side-content">
-        <div className="image-section">
-          <div className="content">
-            <img src={images[currentImage]} alt={`Image ${currentImage + 1}`} />
-          </div>
-          <div className="navigation">
-            <button onClick={() => navigate(setCurrentImage, currentImage, images, -1)}>&lt;</button>
-            <button>+</button>
-            <button onClick={() => navigate(setCurrentImage, currentImage, images, 1)}>&gt;</button>
-          </div>
-        </div>
-        <div className="paragraph-section">
-          <div className="content">
-            <img src={paragraphs[currentParagraph]} alt={`Paragraph ${currentParagraph + 1}`} />
-          </div>
-          <div className="navigation">
-            <button onClick={() => navigate(setCurrentParagraph, currentParagraph, paragraphs, -1)}>&lt;</button>
-            <button>+</button>
-            <button onClick={() => navigate(setCurrentParagraph, currentParagraph, paragraphs, 1)}>&gt;</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+    );
+}
 
 export default SlidePage;
