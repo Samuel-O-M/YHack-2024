@@ -42,45 +42,41 @@ function App() {
 
   const handleSubmit = () => {
     if (selectedImages.length === 0 || !latexCode) {
-      alert('Please select both a ZIP file with images and a LaTeX code file.');
-      return;
+        alert('Please select both a ZIP file with images and a LaTeX code file.');
+        return;
     }
 
     const data = new FormData();
     selectedImages.forEach((image) => {
-      data.append('images', image);
+        data.append('images[]', image);  // backend expects 'images[]'
     });
     const latexBlob = new Blob([latexCode], { type: 'text/plain' });
     const latexFile = new File([latexBlob], 'latex_code.txt', { type: 'text/plain' });
-    data.append('textfile', latexFile);
+    data.append('tex_file', latexFile);  // backend expects 'tex_file'
 
-    fetch('http://localhost:5173/upload', {
-      method: 'POST',
-      body: data,
+    fetch('http://localhost:5000/initialize', {  // Backend Flask server
+        method: 'POST',
+        body: data,
     })
-      .then((response) => {
+    .then((response) => {
         if (response.ok) {
-          return response.blob();
+            return response.json();  // Parse backend response (success or error message)
         } else {
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
+            return response.text().then((text) => {
+                throw new Error(text);
+            });
         }
-      })
-      .then((pdfBlob) => {
-        const url = window.URL.createObjectURL(pdfBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'output.pdf';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      })
-      .catch((error) => {
+    })
+    .then((jsonResponse) => {
+        console.log('Backend response:', jsonResponse);
+        // Redirect to the SlidePage with the data if needed
+        // You can use a router (e.g., React Router) to move to SlidePage
+    })
+    .catch((error) => {
         console.error('Error uploading files:', error);
-      });
-  };
+    });
+};
+
 
   return (
     <div className='landing-page'>
