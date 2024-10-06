@@ -17,7 +17,7 @@ def open_text(text_file):
         return file.read() 
 
 text = open_text(TEXT_FILE)
-# print(text)
+
 
 
 def get_functions_from_latex(latex_content):
