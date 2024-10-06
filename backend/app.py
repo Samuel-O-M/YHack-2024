@@ -44,10 +44,7 @@ def initialize():
         }
 
         # process_structure('output/paper.tex', 'structure.json')
-        # process_formulas('output/paper.tex', 'formulas.json')
-        
-        # with open('output/images.json', 'w') as json_file:
-        #     json.dump(images_json_data, json_file, indent=4)
+        process_formulas('output/paper.tex', 'formulas.json')
 
         # with open('structure.json', 'r') as json_file:
         #     data = json.load(json_file)
