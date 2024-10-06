@@ -20,41 +20,50 @@ def home():
 # process the formulas in formulas.py, sending to formulas.json
 @app.route('/initialize', methods=['POST'])
 def initialize():
-
-    
-    create_output_directory()
-
-    with open('structure.json', 'r') as json_file:
-        data = json.load(json_file)
-
-    slide_creator = SlideCreator(
-        title=data['title'],
-        name=data['author'],
-        date=data['date'],
-        sections=data['sections']
-    )
-
     try:
-        # tex_file = request.files.get('tex_file')
-        # images = request.files.getlist('images[]')
+        if not os.path.exists('output/images'):
+            os.makedirs('output/images')
 
-        # if not tex_file or not images:
-        #     return {'status': 'error', 'message': 'Missing .tex file or images.'}, 400
+        tex_file = request.files.get('tex_file')
+        images = request.files.getlist('images[]')
 
-        # tex_file_path = 'input/paper.tex'
-        # tex_file.save(tex_file_path)
+        if not tex_file or not images:
+            return jsonify({'status': 'error', 'message': 'Missing .tex file or images.'}), 400
 
-        # for i, image in enumerate(images):
-        #     image.save(f'output/image_{i}.png')
+        tex_file_path = 'output/paper.tex'
+        tex_file.save(tex_file_path)
 
-        process_images('output', 'images.json')
-        process_tex('output/paper.tex', 'structure.json')
-        process_formulas('output/paper.tex', 'formulas.json')
+        image_filenames = []
+        for image in images:
+            image_filename = image.filename
+            image.save(f'output/images/{image_filename}')
+            image_filenames.append(image_filename)
 
-        return {'status': 'success', 'message': 'Initialization completed successfully.'}, 200
+        images_json_data = {
+            "images": image_filenames
+        }
+
+        # process_structure('output/paper.tex', 'structure.json')
+        # process_formulas('output/paper.tex', 'formulas.json')
+        
+        # with open('output/images.json', 'w') as json_file:
+        #     json.dump(images_json_data, json_file, indent=4)
+
+        # with open('structure.json', 'r') as json_file:
+        #     data = json.load(json_file)
+
+        # slide_creator = SlideCreator(
+        #     title=data['title'],
+        #     name=data['author'],
+        #     date=data['date'],
+        #     sections=data['sections']
+        # )
+
+        return jsonify({'status': 'success', 'message': 'Initialization completed successfully.'}), 200
 
     except Exception as e:
-        return {'status': 'error', 'message': f'An error occurred: {str(e)}'}, 500
+        return jsonify({'status': 'error', 'message': f'An error occurred: {str(e)}'}), 500
+
 
 
 # call compiler.py.
