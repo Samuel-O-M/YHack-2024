@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css';
+import './app.css';
 import JSZip from 'jszip';
 import { useNavigate } from 'react-router-dom';
 
@@ -82,9 +82,11 @@ function App() {
         />
       </div>
 
-      <button className="submit-button" onClick={handleSubmit}>
-        Submit
-      </button>
+      <div className="submit-button-container">
+        <button className="submit-button" onClick={handleSubmit}>
+          Submit
+        </button>
+      </div>
     </>
   );
 }

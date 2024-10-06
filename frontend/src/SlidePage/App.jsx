@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.css';
+import './SlidePage.css';
 
 const SlidePage = () => {
   const [slides, setSlides] = useState(['Slide 1', 'Slide 2', 'Slide 3']);
@@ -22,7 +22,9 @@ const SlidePage = () => {
     <div className="slide-page">
       <div className="main-content">
         <div className="slide-section">
-          <h2>{slides[currentSlide]}</h2>
+          <div className="content">
+            <h2>{slides[currentSlide]}</h2>
+          </div>
           <div className="navigation">
             <button onClick={() => navigate(setCurrentSlide, currentSlide, slides, -1)}>&lt;</button>
             <button onClick={addSlide}>+</button>
@@ -32,16 +34,22 @@ const SlidePage = () => {
       </div>
       <div className="side-content">
         <div className="image-section">
-          <p>{images[currentImage]}</p>
+          <div className="content">
+            <p>{images[currentImage]}</p>
+          </div>
           <div className="navigation">
             <button onClick={() => navigate(setCurrentImage, currentImage, images, -1)}>&lt;</button>
+            <button>+</button>
             <button onClick={() => navigate(setCurrentImage, currentImage, images, 1)}>&gt;</button>
           </div>
         </div>
         <div className="paragraph-section">
-          <p>{paragraphs[currentParagraph]}</p>
+          <div className="content">
+            <p>{paragraphs[currentParagraph]}</p>
+          </div>
           <div className="navigation">
             <button onClick={() => navigate(setCurrentParagraph, currentParagraph, paragraphs, -1)}>&lt;</button>
+            <button>+</button>
             <button onClick={() => navigate(setCurrentParagraph, currentParagraph, paragraphs, 1)}>&gt;</button>
           </div>
         </div>
