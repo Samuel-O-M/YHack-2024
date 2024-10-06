@@ -75,6 +75,31 @@ _Note: A competitive landscape graph comparing SlideForge with other tools can b
   - openai Python library
 - **Version Control**: Git and GitHub
 
+- **Directory Structure**
+
+```
+backend/
+├── input/
+│   ├── paper.tex
+│   ├── slides.pdf
+│   └── slides.tex
+├── output/
+│   ├── images/
+│   │   ├── image_0.png
+│   │   └── ...
+│   └── slide_png/
+├── openai_key
+├── images.json
+├── structure.json
+├── formulas.json
+├── compiler.py
+├── images.py
+├── structure.py
+├── formulas.py
+├── slide_creator.py
+└── app.py
+```
+
 ## Architecture
 The application consists of a frontend and a backend that communicate via RESTful APIs.
 

@@ -1,0 +1,11 @@
+{
+    "images": [
+        {
+            "filename": "Face.png",
+            "filepath": "backend/output\\images\\Face.png",
+            "width": 278,
+            "height": 443,
+            "size_bytes": 164210
+        }
+    ]
+}

@@ -6,7 +6,7 @@ from flask import Flask, jsonify, Response
 from PIL import Image
 import json
 
-TEXT_FILE = './backend/output/test.tex'       # Path to the text file
+TEXT_FILE = './backend/input/test.tex'       # Path to the text file
 def load_openai_key(key_file_path='./backend/openai_key'):
     try:
         with open(key_file_path, 'r') as key_file:
@@ -74,6 +74,41 @@ def list_to_json(lst, file_path = "./backend/formulas.json"):
     with open(file_path, 'w') as json_file:
         json.dump(dictionary, json_file, indent=4)
         
+def process_formulas(tex_file_path, formulas_file_path="./backend/formulas.json"):
+    """
+    Main function to process the LaTeX file and extract formulas.
+    
+    Args:
+        tex_file_path (str): Path to the LaTeX `.tex` file.
+        formulas_file_path (str): Path to save the formulas JSON file.
+    """
+    # Load OpenAI API key
+    api_key = load_openai_key()
+    if not api_key:
+        print("OpenAI API key not loaded. Exiting process_formulas.")
+        return
+    
+    # Read the LaTeX content
+    latex_content = open_text(tex_file_path)
+    if not latex_content:
+        print("Failed to read LaTeX content. Exiting process_formulas.")
+        return
+    
+    # Extract functions using OpenAI's API
+    functions = get_functions_from_latex(latex_content)
+    if not functions:
+        print("No functions extracted. Skipping formula processing.")
+        return
+    
+    # Split the extracted functions into individual equations
+    split_equations_text = split_latex_equations(functions)
+    
+    # Clean and normalize the equations
+    list_equations_text = list_equations(split_equations_text)
+    
+    # Save the list of formulas to JSON
+    list_to_json(list_equations_text, formulas_file_path)
+
 def main():
     text = open_text(TEXT_FILE)
     api_key = load_openai_key()
