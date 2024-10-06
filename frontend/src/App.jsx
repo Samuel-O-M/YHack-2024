@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './app.css';
+import './App.css';
 import JSZip from 'jszip';
 
 function App() {
@@ -98,6 +98,7 @@ function App() {
 
   return (
     <>
+    <div className='landing-page'>
       <div className="zip-upload-section">
         <h2>Select Zip File with Images</h2>
         <input
@@ -126,6 +127,7 @@ function App() {
           Submit
         </button>
       </div>
+    </div>
     </>
   );
 }

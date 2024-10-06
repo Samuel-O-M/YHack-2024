@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 import './SlidePage.css';
 
+// Import your images
+import slideImage1 from '../assets/images/slide1.png'; // Replace with actual path
+import slideImage2 from '../assets/images/slide2.png';
+import slideImage3 from '../assets/images/slide3.png';
+
+import sideImage1 from '../assets/images/slide1.png';
+import sideImage2 from '../assets/images/slide2.png';
+import sideImage3 from '../assets/images/slide3.png';
+
+import paragraphImage1 from '../assets/images/slide1.png';
+import paragraphImage2 from '../assets/images/slide2.png';
+import paragraphImage3 from '../assets/images/slide3.png';
+
 const SlidePage = () => {
-  const [slides, setSlides] = useState(['Slide 1', 'Slide 2', 'Slide 3']);
-  const [images, setImages] = useState(['Image 1', 'Image 2', 'Image 3']);
-  const [paragraphs, setParagraphs] = useState(['Paragraph 1', 'Paragraph 2', 'Paragraph 3']);
+  const [slides, setSlides] = useState([slideImage1, slideImage2, slideImage3]);
+  const [images, setImages] = useState([sideImage1, sideImage2, sideImage3]);
+  const [paragraphs, setParagraphs] = useState([paragraphImage1, paragraphImage2, paragraphImage3]);
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentImage, setCurrentImage] = useState(0);
   const [currentParagraph, setCurrentParagraph] = useState(0);
@@ -14,7 +28,7 @@ const SlidePage = () => {
   };
 
   const addSlide = () => {
-    setSlides([...slides, `Slide ${slides.length + 1}`]);
+    setSlides([...slides, slideImage1]); // Add a placeholder or new slide image
     setCurrentSlide(slides.length);
   };
 
@@ -23,7 +37,7 @@ const SlidePage = () => {
       <div className="main-content">
         <div className="slide-section">
           <div className="content">
-            <h2>{slides[currentSlide]}</h2>
+            <img src={slides[currentSlide]} alt={`Slide ${currentSlide + 1}`} />
           </div>
           <div className="navigation">
             <button onClick={() => navigate(setCurrentSlide, currentSlide, slides, -1)}>&lt;</button>
@@ -35,7 +49,7 @@ const SlidePage = () => {
       <div className="side-content">
         <div className="image-section">
           <div className="content">
-            <p>{images[currentImage]}</p>
+            <img src={images[currentImage]} alt={`Image ${currentImage + 1}`} />
           </div>
           <div className="navigation">
             <button onClick={() => navigate(setCurrentImage, currentImage, images, -1)}>&lt;</button>
@@ -45,7 +59,7 @@ const SlidePage = () => {
         </div>
         <div className="paragraph-section">
           <div className="content">
-            <p>{paragraphs[currentParagraph]}</p>
+            <img src={paragraphs[currentParagraph]} alt={`Paragraph ${currentParagraph + 1}`} />
           </div>
           <div className="navigation">
             <button onClick={() => navigate(setCurrentParagraph, currentParagraph, paragraphs, -1)}>&lt;</button>
