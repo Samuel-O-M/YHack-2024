@@ -1,11 +1,33 @@
 {
-    "title": "Mathematics Concepts",
-    "author": "John Doe",
-    "date": "2021-01-01",
-    "sections": [
-        "Introduction",
-        "Formulas",
-        "Images",
-        "Conclusion"        
+    "paper_name": [
+        "Comparative Analysis of Quantum Algorithm for Portfolio Optimization: A Study of VQE"
+    ],
+    "section_titles": [
+        "1. Introduction",
+        "2. Theory",
+        "1. Variational Quantum Algorithm Overview",
+        "2. Quantum Formulation of Portfolio Optimization",
+        "3. Methodology",
+        "1. Portfolio Choices",
+        "2. Qiskit Implementation",
+        "3. IBM Hardware Implementation",
+        "4. Performance Metrics and Evaluation",
+        "1. Global Minimum Variance Portfolio (GMVP)",
+        "2. Minimum Eigensolver",
+        "3. Monte Carlo Simulation",
+        "5. Results",
+        "6. Discussion",
+        "1. Time Complexity",
+        "2. Space Complexity",
+        "7. Conclusion",
+        "8. Appendix"
+    ],
+    "authors_names": [
+        "- Michael Cai",
+        "- Justin Beltran",
+        "- Chaipat Tirapongprasert",
+        "- Hyeon-Tae Hwang",
+        "- Yoonsuk Choi",
+        "- Farhaan Siddiqui"
     ]
 }
