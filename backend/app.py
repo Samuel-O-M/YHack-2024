@@ -1,17 +1,17 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from compiler import *
-from images import *
 from formulas import *
 from structure import *
 from slide_creator import *
 import os
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def home():
     return "Welcome to the SlideForge!"
-
 
 # initialize
 # get the images and the .tex from the paper
@@ -30,7 +30,7 @@ def initialize():
         if not tex_file or not images:
             return jsonify({'status': 'error', 'message': 'Missing .tex file or images.'}), 400
 
-        tex_file_path = 'output/paper.tex'
+        tex_file_path = 'input/paper.tex'
         tex_file.save(tex_file_path)
 
         image_filenames = []
@@ -43,8 +43,11 @@ def initialize():
             "images": image_filenames
         }
 
-        # process_structure('output/paper.tex', 'structure.json')
-        process_formulas('output/paper.tex', 'formulas.json')
+        with open('images.json', 'w') as json_file:
+            json.dump(images_json_data, json_file)
+
+        # process_structure('output/paper.tex')
+        # process_formulas('output/paper.tex')
 
         # with open('structure.json', 'r') as json_file:
         #     data = json.load(json_file)
