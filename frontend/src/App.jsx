@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './App.css';
+import './app.css';
 import JSZip from 'jszip';
 
 function App() {
@@ -121,9 +121,11 @@ function App() {
           onChange={handleLatexFileSelection}
         />
       </div>
-      <button className="submit-button" onClick={handleSubmit}>
-        Submit
-      </button>
+      <div className="submit-button-container">
+        <button className="submit-button" onClick={handleSubmit}>
+          Submit
+        </button>
+      </div>
     </>
   );
 }

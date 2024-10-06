@@ -1,6 +1,3 @@
 venv/
-<<<<<<< HEAD
 openai_key
-=======
-secret_key
->>>>>>> 25fd5fd74427af148194d3a1d20fd522f41c207c
+tempCodeRunnerFile.py
