@@ -1,63 +1,84 @@
+# one function that converts .tex (in output) to .pdf (in output)
+# one function that gets the .tex file (in output)
+# one function that gets the .pdf file (in output)
+# one function that converts the .pdf to images and stores them (in output/slide_png)
+# one function that gets the images (in output/slide_png)
+
+
+import subprocess
 import os
-from flask import Flask, send_file, request, jsonify
-import pdflatex
-import requests
-
-app = Flask(__name__)
-
-OUTPUT_FOLDER = 'test_output/'
-TEST_INPUT_FOLDER = 'test_input/'
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
-app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
-app.config['TEST_INPUT_FOLDER'] = TEST_INPUT_FOLDER
+import shutil
+from pdf2image import convert_from_path  # Requires pdf2image module
 
 
-@app.route("/")
-def home():
-    condition = request.args.get('condition', 'False')
-    if condition == 'True':
-        return "<h1>Welcome to the Flask Backend!</h1><p>This is the landing page of your backend.</p>"
-    else:
-        return "<h1>Condition not met</h1>"
-
-
-@app.route("/test_conversion", methods=['GET'])
-def convert_test_tex_file():
-
-    send_attachment = request.args.get('send_attachment', 'False')
+def tex_to_pdf(tex_file_path, output_folder='output'):
     
-    tex_file_path = os.path.join(app.config['TEST_INPUT_FOLDER'], 'main.tex')
-    
-    if not os.path.exists(tex_file_path):
-        return jsonify({"error": "Test .tex file not found"}), 404
-    
-    pdf_file_path = convert_tex_to_pdf(tex_file_path)
-    
-    if pdf_file_path:
-        if send_attachment == 'True':
-            return send_file(pdf_file_path, as_attachment=True)
-        else:
-            return jsonify({"message": "Conversion successful"})
-    else:
-        return jsonify({"error": "Error converting to PDF"}), 500
+    if not tex_file_path.endswith(".tex"):
+        raise ValueError("The provided file is not a .tex file.")
 
+    file_dir = os.path.dirname(tex_file_path)
+    file_name = os.path.basename(tex_file_path)
 
-def convert_tex_to_pdf(tex_file_path):
     try:
-        with open(tex_file_path, 'rb') as tex_file:
-            pdfl = pdflatex.PDFLaTeX.from_binarystring(tex_file.read(), tex_file_path)
-            pdf, log, cp = pdfl.create_pdf()
-        
-        output_pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], 'output.pdf')
-        with open(output_pdf_path, 'wb') as output_file:
-            output_file.write(pdf)
-        
-        return output_pdf_path
-    except Exception as e:
-        print(f"Error generating PDF: {e}")
-        return None
+        subprocess.run(["pdflatex", file_name], cwd=file_dir, check=True)
+        pdf_file = file_name.replace(".tex", ".pdf")
+        pdf_path = os.path.join(file_dir, pdf_file)
+
+        if os.path.exists(pdf_path):     
+            # return pdf_path       
+            output_pdf_path = os.path.join(output_folder, pdf_file)
+            shutil.move(pdf_path, output_pdf_path)
+        else:
+            raise FileNotFoundError(f"PDF not generated: {pdf_path}")
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"Error compiling LaTeX file: {str(e)}")
+
+
+def get_tex(tex_file_path):
+    with open(tex_file_path, 'rb') as f:
+        return f.read()
+
+def get_pdf(pdf_file_path):
+    with open(pdf_file_path, 'rb') as f:
+        return f.read()
+
+
+def pdf_to_png(pdf_file_path, output_folder='output/slide_png'):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    for file_name in os.listdir(output_folder):
+        if file_name.endswith('.png'):
+            os.remove(os.path.join(output_folder, file_name))
+
+    images = convert_from_path(pdf_file_path)
+    
+    image_paths = []
+    for i, image in enumerate(images):
+        image_file = os.path.join(output_folder, f'slide_{i+1}.png')
+        image.save(image_file, 'PNG')
+        image_paths.append(image_file)
+
+
+def get_png(image_folder):
+    image_paths = []
+    for file_name in os.listdir(image_folder):
+        if file_name.endswith('.png'):
+            image_paths.append(os.path.join(image_folder, file_name))
+    return image_paths
+
+
+def clear_pdf(pdf_file_path):
+    os.remove(pdf_file_path)
+
+
+def clear_png(image_folder):
+    for file_name in os.listdir(image_folder):
+        if file_name.endswith('.png'):
+            os.remove(os.path.join(image_folder, file_name))
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    clear_png('output/slide_png')
+    tex_to_pdf('output/slides.tex', output_folder='input')
+    pdf_to_png('input/slides.pdf')
