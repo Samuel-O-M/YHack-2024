@@ -135,7 +135,7 @@ class SlideCreator:
         ])
         self.slide_count += 1  
 
-        with open('main.tex', 'w') as f:
+        with open(os.path.join('output', 'slides.tex'), 'w') as f:
             f.writelines(content)
 
 
@@ -222,23 +222,15 @@ class SlideCreator:
             print(f"Slide number {slide_number} is out of range in section '{section}'.")
 
 
-def create_test_output_directory(directory='test_output'):
+def create_output_directory(directory='output'):
     if not os.path.exists(directory):
         os.makedirs(directory)
         print(f"Created directory: {directory}")
     else:
         print(f"Directory already exists: {directory}")
 
-def copy_latex_file(source='main.tex', destination='test_output/output.tex'):
-    try:
-        shutil.copy(source, destination)
-        print(f"Copied {source} to {destination}")
-    except FileNotFoundError:
-        print(f"Source file {source} not found. Make sure to run the SlideCreator first.")
-
-
 if __name__ == "__main__":
-    create_test_output_directory()
+    create_output_directory()
 
     with open('structure.json', 'r') as json_file:
         data = json.load(json_file)
@@ -275,6 +267,4 @@ if __name__ == "__main__":
 
     slide_creator.remove_slide("Conclusion", 0)
 
-    copy_latex_file()
-
-    print("Test sequence completed. The final LaTeX document is saved in 'test_output/output.tex'.")
+    print("Test sequence completed. The final LaTeX document is saved in 'output/slides.tex'.")
