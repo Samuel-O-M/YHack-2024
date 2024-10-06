@@ -12,11 +12,6 @@ app = Flask(__name__)
 def home():
     return "Welcome to the SlideForge!"
 
-@app.route('/output/<filename>')
-def get_output_file(filename):
-    return send_from_directory('output', filename)
-
-
 
 # initialize
 # get the images and the .tex from the paper
