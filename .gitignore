@@ -5,6 +5,14 @@ tempCodeRunnerFile.py
 **.aux
 **.log
 **.synctex.gz
+**.out
+**.toc
+**.nav
+**.snm
+**.dvi
+**.bbl
+**.fls
+
 
 **.tex
 **.pdf
