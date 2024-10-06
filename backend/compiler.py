@@ -1,63 +1,82 @@
 import os
-from flask import Flask, send_file, request, jsonify
 import pdflatex
-import requests
+from pdf2image import convert_from_path
+from io import BytesIO
 
-app = Flask(__name__)
-
-OUTPUT_FOLDER = 'test_output/'
-TEST_INPUT_FOLDER = 'test_input/'
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
-app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
-app.config['TEST_INPUT_FOLDER'] = TEST_INPUT_FOLDER
-
-
-@app.route("/")
-def home():
-    condition = request.args.get('condition', 'False')
-    if condition == 'True':
-        return "<h1>Welcome to the Flask Backend!</h1><p>This is the landing page of your backend.</p>"
-    else:
-        return "<h1>Condition not met</h1>"
-
-
-@app.route("/test_conversion", methods=['GET'])
-def convert_test_tex_file():
-
-    send_attachment = request.args.get('send_attachment', 'False')
-    
-    tex_file_path = os.path.join(app.config['TEST_INPUT_FOLDER'], 'main.tex')
-    
-    if not os.path.exists(tex_file_path):
-        return jsonify({"error": "Test .tex file not found"}), 404
-    
-    pdf_file_path = convert_tex_to_pdf(tex_file_path)
-    
-    if pdf_file_path:
-        if send_attachment == 'True':
-            return send_file(pdf_file_path, as_attachment=True)
-        else:
-            return jsonify({"message": "Conversion successful"})
-    else:
-        return jsonify({"error": "Error converting to PDF"}), 500
-
+folder = 'output'
+os.makedirs(folder, exist_ok=True)
 
 def convert_tex_to_pdf(tex_file_path):
-    try:
-        with open(tex_file_path, 'rb') as tex_file:
-            pdfl = pdflatex.PDFLaTeX.from_binarystring(tex_file.read(), tex_file_path)
-            pdf, log, cp = pdfl.create_pdf()
-        
-        output_pdf_path = os.path.join(app.config['OUTPUT_FOLDER'], 'output.pdf')
-        with open(output_pdf_path, 'wb') as output_file:
-            output_file.write(pdf)
-        
-        return output_pdf_path
-    except Exception as e:
-        print(f"Error generating PDF: {e}")
-        return None
+    with open(tex_file_path, 'rb') as tex_file:
+        pdfl = pdflatex.PDFLaTeX.from_binarystring(tex_file.read(), tex_file_path)
+        pdf, log, cp = pdfl.create_pdf()
+    return pdf
 
+def convert_tex_file():
+    tex_file_path = os.path.join(folder, 'slides.tex')
+    if not os.path.exists(tex_file_path):
+        raise FileNotFoundError("Test .tex file not found")
+    try:
+        pdf_content = convert_tex_to_pdf(tex_file_path)
+    except Exception:
+        raise RuntimeError("Error converting to PDF")
+    output_pdf_path = os.path.join(folder, 'slides.pdf')
+    try:
+        with open(output_pdf_path, 'wb') as f:
+            f.write(pdf_content)
+    except Exception:
+        raise IOError("Error writing PDF file")
+    return output_pdf_path
+
+def get_tex_file():
+    tex_file_path = os.path.join(folder, 'slides.tex')
+    if not os.path.exists(tex_file_path):
+        raise FileNotFoundError("slides.tex not found")
+    with open(tex_file_path, 'rb') as f:
+        return f.read()
+
+def get_pdf_file():
+    pdf_file_path = os.path.join(folder, 'slides.pdf')
+    if not os.path.exists(pdf_file_path):
+        raise FileNotFoundError("slides.pdf not found")
+    with open(pdf_file_path, 'rb') as f:
+        return f.read()
+
+def convert_pdf_to_images():
+    pdf_file_path = os.path.join(folder, 'slides.pdf')
+    if not os.path.exists(pdf_file_path):
+        raise FileNotFoundError("slides.pdf not found")
+    try:
+        images = convert_from_path(pdf_file_path)
+        image_bytes_list = []
+        for img in images:
+            img_byte_arr = BytesIO()
+            img.save(img_byte_arr, format='PNG')
+            image_bytes_list.append(img_byte_arr.getvalue())
+        return image_bytes_list
+    except Exception:
+        raise RuntimeError("Error converting PDF to images")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    try:
+        pdf_file_path = convert_tex_file()
+        print("Conversion successful")
+        print(f"PDF saved to '{pdf_file_path}'")
+        tex_content = get_tex_file()
+        print(f"Retrieved slides.tex of size {len(tex_content)} bytes")
+        pdf_content = get_pdf_file()
+        print(f"Retrieved slides.pdf of size {len(pdf_content)} bytes")
+        images = convert_pdf_to_images()
+        for idx, img in enumerate(images, start=1):
+            image_path = os.path.join(folder, 'slide_png', f'slide_{idx}.png')
+            with open(image_path, 'wb') as img_file:
+                img_file.write(img)
+            print(f"Image saved to '{image_path}'")
+    except FileNotFoundError as e:
+        print(f"File error: {e}")
+    except IOError as e:
+        print(f"I/O error: {e}")
+    except RuntimeError as e:
+        print(f"Runtime error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
