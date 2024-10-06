@@ -4,7 +4,7 @@ from images import *
 from formulas import *
 from structure import *
 from slide_creator import *
-
+import os
 
 app = Flask(__name__)
 
@@ -33,9 +33,9 @@ def initialize():
         for i, image in enumerate(images):
             image.save(f'output/image_{i}.png')
 
-        # process_images('output', 'images.json')
-        # process_tex('output/paper.tex', 'structure.json')
-        # process_formulas('output/paper.tex', 'formulas.json')
+        process_images('output', 'images.json')
+        process_tex('output/paper.tex', 'structure.json')
+        process_formulas('output/paper.tex', 'formulas.json')
 
         return {'status': 'success', 'message': 'Initialization completed successfully.'}, 200
 
