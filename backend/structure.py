@@ -4,7 +4,7 @@ import openai
 import json
 
 
-TEXT_FILE = './backend/output/test.tex'       # Path to the text file
+TEXT_FILE = './backend/input/test.tex'       # Path to the text file
 
 def load_openai_key(key_file_path='./backend/openai_key'):
     try:
@@ -18,8 +18,6 @@ def load_openai_key(key_file_path='./backend/openai_key'):
 def open_text(text_file):
     with open(text_file, 'r', encoding='utf-8') as file:
         return file.read() 
-
-
 
 def get_sections_from_latex(latex_content, api_key):
     client = OpenAI(api_key=api_key)
@@ -83,11 +81,45 @@ def process_sections(paper_name, section_titles, authors_names, file_path = "./b
         'authors_names': authors_names_list  # Processed authors names list
     }
     
-    # Convert the dictionary to JSON format and return it
-    with open(file_path, 'w') as json_file:
-        json.dump(parsed_data, json_file, indent=4)
+    # Convert the dictionary to JSON format and save it
+    try:
+        with open(file_path, 'w') as json_file:
+            json.dump(parsed_data, json_file, indent=4)
+        print(f"Structure data saved to {file_path}")
+    except Exception as e:
+        print(f"Error saving structure data: {e}")
 
-
+def process_tex(tex_file_path, structure_file_path="./backend/structure.json"):
+    """
+    Main function to process the LaTeX file and extract structure.
+    
+    Args:
+        tex_file_path (str): Path to the LaTeX `.tex` file.
+        structure_file_path (str): Path to save the structure JSON file.
+    """
+    # Load OpenAI API key
+    api_key = load_openai_key()
+    if not api_key:
+        print("OpenAI API key not loaded. Exiting process_tex.")
+        return
+    
+    # Read the LaTeX content
+    latex_content = open_text(tex_file_path)
+    if not latex_content:
+        print("Failed to read LaTeX content. Exiting process_tex.")
+        return
+    
+    # Extract title, authors, and sections
+    title = get_title_from_latex(latex_content)
+    authors = get_authors_from_latex(latex_content)
+    sections = get_sections_from_latex(latex_content)
+    
+    if not title:
+        print("No title extracted. Skipping structure processing.")
+        return
+    
+    # Process and save the extracted data
+    process_sections(title, sections, authors, structure_file_path)
 
 def main():
     api_key = load_openai_key()
