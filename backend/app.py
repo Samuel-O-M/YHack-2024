@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from compiler import *
-from images import *
 from formulas import *
 from structure import *
 from slide_creator import *
