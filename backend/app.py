@@ -31,7 +31,7 @@ def initialize():
         if not tex_file or not images:
             return jsonify({'status': 'error', 'message': 'Missing .tex file or images.'}), 400
 
-        tex_file_path = 'output/paper.tex'
+        tex_file_path = 'input/paper.tex'
         tex_file.save(tex_file_path)
 
         image_filenames = []
