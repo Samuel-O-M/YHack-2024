@@ -20,7 +20,27 @@ def home():
 # process the formulas in formulas.py, sending to formulas.json
 @app.route('/initialize', methods=['POST'])
 def initialize():
-    return 0
+    try:
+        tex_file = request.files.get('tex_file')
+        images = request.files.getlist('images[]')
+
+        if not tex_file or not images:
+            return {'status': 'error', 'message': 'Missing .tex file or images.'}, 400
+
+        tex_file_path = 'input/paper.tex'
+        tex_file.save(tex_file_path)
+
+        for i, image in enumerate(images):
+            image.save(f'output/image_{i}.png')
+
+        # process_images('output', 'images.json')
+        # process_tex('output/paper.tex', 'structure.json')
+        # process_formulas('output/paper.tex', 'formulas.json')
+
+        return {'status': 'success', 'message': 'Initialization completed successfully.'}, 200
+
+    except Exception as e:
+        return {'status': 'error', 'message': f'An error occurred: {str(e)}'}, 500
 
 
 # call compiler.py.
@@ -28,9 +48,16 @@ def initialize():
 # convert the .pdf to .png 
 @app.route('/compile', methods=['POST'])
 def compile():
-    clear_png('output/slide_png')
-    tex_to_pdf('output/slides.tex', output_folder='input')
-    pdf_to_png('input/slides.pdf')
+    try:
+        clear_png('output/slide_png')
+        tex_to_pdf('output/slides.tex', output_folder='input')
+        pdf_to_png('input/slides.pdf')
+        return {'status': 'success', 'message': 'Compilation and conversion completed successfully.'}, 200
+    except FileNotFoundError as e:
+        return {'status': 'error', 'message': f'File not found: {str(e)}'}, 400
+    except Exception as e:
+        return {'status': 'error', 'message': f'An error occurred: {str(e)}'}, 500
+
 
 
 # add image to the slide
