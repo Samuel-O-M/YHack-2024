@@ -229,6 +229,7 @@ def create_output_directory(directory='output'):
     else:
         print(f"Directory already exists: {directory}")
 
+
 if __name__ == "__main__":
     create_output_directory()
 
@@ -243,11 +244,24 @@ if __name__ == "__main__":
     )
 
     slide_creator.add_slide("Introduction")
-    slide_creator.add_slide("Introduction", position=0)
-    slide_creator.add_slide("Formulas")    
-    slide_creator.add_slide("Formulas", position=1)
-    slide_creator.add_slide("Images")
+
+    slide_creator.add_slide("Theory")
+    slide_creator.add_slide("Theory")
+
+    slide_creator.add_slide("Methodology")
+    slide_creator.add_slide("Methodology")
+
+    slide_creator.add_slide("Performance Metrics and Evaluation")
+
+    slide_creator.add_slide("Results")
+
+    slide_creator.add_slide("Discussion")
+
     slide_creator.add_slide("Conclusion")
+
+    
+
+
 
     slide_creator.add_formula_to_slide("Introduction", 0, "f(x) = x^2")
     slide_creator.add_formula_to_slide("Introduction", 0, "g(x) = 2x + 5")
