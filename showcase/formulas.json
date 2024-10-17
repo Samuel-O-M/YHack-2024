@@ -1,0 +1,29 @@
+{
+    "formulas": [
+        "E_0 \\leq \\frac{\\bra{\\psi}\\hat{H}\\ket{\\psi}}{\\bra{\\psi}\\psi\\rangle}.",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\bra{0}U^\\dagger(\\theta) \\hat{H} U(\\theta)\\ket{0}.",
+        "\\hat{H} = \\sum_a w_a \\hat{P}_a,",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a \\bra{0}U^\\dagger(\\theta) \\hat{P}_a U(\\theta)\\ket{0},",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a E_{P_a}",
+        "n_{\\text{max}}^i = \\text{Int}\\left(\\frac{B}{P_i}\\right),",
+        "d_i = \\text{Int}\\left(\\log_2 n_{\\text{max}}^i\\right),",
+        "n_i = \\sum_{j=0}^{d_i} 2^j b_{i,j}.",
+        "\\text{dim}(b) = \\sum_{i=1}^{N} (d_i + 1).",
+        "\\mu'' = C^T \\mu', \\quad \\Sigma'' = C^T \\Sigma' C, \\quad P'' = C^T P'.",
+        "\\max_b L(b) : \\max_b \\left( \\mu''^T b - b^T \\Sigma'' b - \\lambda \\left(P''^T b - 1 \\right)^2 \\right),",
+        "L(b) = \\sum_i \\mu''_i b_i - \\sum_{i,j} \\Sigma''_{i,j} b_i b_j - \\lambda \\left(\\sum_i P''_i b_i - 1\\right)^2.",
+        "L(s) = \\sum_i h_i s_i + \\sum_{i,j} J_{i,j} s_i s_j + \\lambda \\left( \\sum_i \\pi_i s_i - \\beta \\right)^2,",
+        "H = \\sum_i h_i Z_i + \\sum_{i,j} J_{i,j} Z_i \\otimes Z_j + \\lambda \\left( \\sum_i \\pi_i Z_i - \\beta \\right)^2.",
+        "\\text{Cov}(A,B) = \\frac{1}{n-1} \\sum_{t=1}^{n} \\left( R_{A,t} - \\bar{R}_A \\right)\\left( R_{B,t} - \\bar{R}_B \\right)",
+        "U_i(\\theta) = \\exp\\left(-j \\frac{\\theta_i}{2} P_i\\right)",
+        "\\frac{\\partial V(\\theta)}{\\partial \\theta_i} = \\frac{V\\left(\\theta + \\frac{\\pi}{2} e_i\\right) - V\\left(\\theta - \\frac{\\pi}{2} e_i\\right)}{2}",
+        "\\langle O \\rangle | \\Psi(\\theta) \\rangle = \\langle \\Psi(\\theta) | O | \\Psi(\\theta) \\rangle = \\langle 0 | U(\\theta)^* O U(\\theta) | 0 \\rangle",
+        "\\text{Risk}^{(k)} = \\mathbf{w}^{(k)^\\top} \\Sigma \\mathbf{w}^{(k)}",
+        "\\text{AdjustedReturn}^{(k)} = R^{(k)} - \\lambda \\cdot \\text{Risk}^{(k)}",
+        "\\frac{\\partial V(\\theta)}{\\partial \\theta_i} = \\frac{V\\left(\\theta + \\frac{\\pi}{2} e_i\\right) - V\\left(\\theta - \\frac{\\pi}{2} e_i\\right)}{2}",
+        "E_0 \\leq \\frac{\\bra{\\psi}\\hat{H}\\ket{\\psi}}{\\bra{\\psi}\\psi\\rangle}",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\bra{0}U^\\dagger(\\theta) \\hat{H} U(\\theta)\\ket{0}",
+        "\\hat{H} = \\sum_a w_a \\hat{P}_a",
+        "E_{\\text{VQE}} = \\min_{\\theta} \\sum_a w_a \\bra{0}U^\\dagger(\\theta) \\hat{P}_a U(\\theta)\\ket{0}"
+    ]
+}

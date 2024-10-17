@@ -1,0 +1,14 @@
+{
+    "title": "Comparative Analysis of Quantum Algorithm for Portfolio Optimization: A Study of VQE",
+    "sections": [
+        "Introduction",
+        "Theory",
+        "Methodology",
+        "Performance Metrics and Evaluation",
+        "Results",
+        "Discussion",
+        "Conclusion"
+    ],
+    "name": "Michael Cai, Justin Beltran, Chaipat Tirapongprasert, Hyeon-Tae Hwang, Yoonsuk Choi, Farhaan Siddiqui",
+    "date": "\\today"
+}
